@@ -20,29 +20,17 @@ subject to the following restrictions:
 
 #include "GLDebugDrawer.h"
 
-
-#define QUAKE_BSP_IMPORTING 1
-
-#ifdef QUAKE_BSP_IMPORTING
 #include "BspLoader.h"
 #include "BspConverter.h"
-#endif //QUAKE_BSP_IMPORTING
-
 
 #include <stdio.h> //printf debugging
-
 
 #include "BspDemo.h"
 #include "GL_ShapeDrawer.h"
 #include "GlutStuff.h"
 
-
-
-
 #define CUBE_HALF_EXTENTS 1
 #define EXTRA_HEIGHT -20.f
-
-
 
 ///BspToBulletConverter  extends the BspConverter to convert to Bullet datastructures
 class BspToBulletConverter : public BspConverter
@@ -73,23 +61,10 @@ public:
 				btCollisionShape* shape = new btConvexHullShape(&(vertices[0].getX()),vertices.size());
 				m_demoApp->m_collisionShapes.push_back(shape);
 
-				//btRigidBody* body = m_demoApp->localCreateRigidBody(mass, startTransform,shape);
 				m_demoApp->localCreateRigidBody(mass, startTransform,shape);
 			}
 		}
 };
-
-
-
-
-
-////////////////////////////////////
-
-
-
-
-
-
 
 BspDemo::~BspDemo()
 {
@@ -153,21 +128,14 @@ void	BspDemo::initPhysics(const char* bspfilename)
 	///Setup a Physics Simulation Environment
 
 	m_collisionConfiguration = new btDefaultCollisionConfiguration();
-//	btCollisionShape* groundShape = new btBoxShape(btVector3(50,3,50));
 	m_dispatcher = new btCollisionDispatcher(m_collisionConfiguration);
 	btVector3 worldMin(-1000,-1000,-1000);
 	btVector3 worldMax(1000,1000,1000);
 	m_broadphase = new btDbvtBroadphase();
-	//m_broadphase = new btAxisSweep3(worldMin,worldMax);
-	//btOverlappingPairCache* broadphase = new btSimpleBroadphase();
 	m_solver = new btSequentialImpulseConstraintSolver();
-	//ConstraintSolver* solver = new OdeConstraintSolver;
 	m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher,m_broadphase,m_solver,m_collisionConfiguration);
 
 	m_dynamicsWorld->setGravity(-m_cameraUp * 10);
-
-
-#ifdef QUAKE_BSP_IMPORTING
 
 	void* memoryBuffer = 0;
 
@@ -217,13 +185,7 @@ void	BspDemo::initPhysics(const char* bspfilename)
 		fclose(file);
 	}
 
-#endif
-
-
-
-
 	clientResetScene();
-
 }
 
 
@@ -244,12 +206,9 @@ void BspDemo::clientMoveAndDisplay()
 
 }
 
-
-
 void BspDemo::displayCallback(void) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
 	renderme();
 
@@ -261,11 +220,6 @@ void BspDemo::displayCallback(void) {
 	glutSwapBuffers();
 }
 
-
-
-
-
-
 //some code that de-mangles the windows filename passed in as argument
 char cleaned_filename[512];
 char* getLastFileName()
@@ -274,8 +228,6 @@ char* getLastFileName()
 }
 char* makeExeToBspFilename(const char* lpCmdLine)
 {
-
-
 	// We might get a windows-style path on the command line, this can mess up the DOM which expects
 	// all paths to be URI's.  This block of code does some conversion to try and make the input
 	// compliant without breaking the ability to accept a properly formatted URI.  Right now this only
