@@ -62,7 +62,7 @@ BspLoader::BspLoader()
 
 
 bool	BspLoader::loadBSPFile( void* memoryBuffer) {
-	
+
 	BSPHeader	*header = (BSPHeader*) memoryBuffer;
 
 	// load the file header
@@ -70,7 +70,7 @@ bool	BspLoader::loadBSPFile( void* memoryBuffer) {
 	{
 		// swap the header
 		swapBlock( (int *)header, sizeof(*header) );
-		
+
 		int length = (header->lumps[BSPLUMP_SHADERS].filelen) / sizeof(BSPShader);
 		m_dshaders.resize(length+extrasize);
 		m_numShaders = copyLump( header, BSPLUMP_SHADERS, &m_dshaders[0], sizeof(BSPShader) );
@@ -108,7 +108,7 @@ bool	BspLoader::loadBSPFile( void* memoryBuffer) {
 		m_dbrushsides.resize(length+extrasize);
 		m_numbrushsides = copyLump( header, LUMP_BRUSHSIDES, &m_dbrushsides[0], sizeof(BSPBrushSide) );
 
-		
+
 		length = (header->lumps[LUMP_SURFACES].filelen) / sizeof(BSPSurface);
 		m_drawSurfaces.resize(length+extrasize);
 		m_numDrawSurfaces = copyLump( header, LUMP_SURFACES, &m_drawSurfaces[0], sizeof(BSPSurface) );
@@ -148,7 +148,7 @@ bool	BspLoader::loadBSPFile( void* memoryBuffer) {
 const char* BspLoader::getValueForKey( const  BSPEntity* ent, const char* key ) const {
 
 	const BSPKeyValuePair* ep;
-	
+
 	for (ep=ent->epairs ; ep ; ep=ep->next) {
 		if (!strcmp(ep->key, key) ) {
 			return ep->value;
@@ -159,7 +159,7 @@ const char* BspLoader::getValueForKey( const  BSPEntity* ent, const char* key ) 
 
 float	BspLoader::getFloatForKey( const BSPEntity *ent, const char *key ) {
 	const char	*k;
-	
+
 	k = getValueForKey( ent, key );
 	return float(atof(k));
 }
@@ -376,7 +376,7 @@ BSPKeyValuePair *BspLoader::parseEpair( void ) {
 
 	e = (struct BSPPair*) malloc( sizeof(BSPKeyValuePair));
 	memset( e, 0, sizeof(BSPKeyValuePair) );
-	
+
 	if ( strlen(token) >= BSPMAX_KEY-1 ) {
 		//printf ("ParseEpar: token too long");
 	}
@@ -439,7 +439,7 @@ bool	BspLoader::parseEntity( void ) {
 		e->next = mapent->epairs;
 		mapent->epairs = e;
 	} while (1);
-	
+
 	return true;
 }
 
@@ -457,7 +457,7 @@ void BspLoader::parseEntities( void ) {
 	parseFromMemory( &m_dentdata[0], m_entdatasize );
 
 	while ( parseEntity () ) {
-	}	
+	}
 }
 
 
@@ -550,13 +550,13 @@ float	BspLoader::isLittleFloat (float l)
 	if (machineEndianness() == BSP_BIG_ENDIAN)
 	{
 		union {unsigned char b[4]; float f;} in, out;
-		
+
 		in.f = l;
 		out.b[0] = in.b[3];
 		out.b[1] = in.b[2];
 		out.b[2] = in.b[1];
 		out.b[3] = in.b[0];
-		
+
 		return out.f;
 	}
 
@@ -572,13 +572,13 @@ float	BspLoader::isBigFloat (float l)
 	}
 	//little endian
 	union {unsigned char b[4]; float f;} in, out;
-	
+
 	in.f = l;
 	out.b[0] = in.b[3];
 	out.b[1] = in.b[2];
 	out.b[2] = in.b[1];
 	out.b[3] = in.b[0];
-	
+
 	return out.f;
 }
 
@@ -610,7 +610,7 @@ int BspLoader::copyLump( BSPHeader	*header, int lump, void *dest, int size ) {
 
 	length = header->lumps[lump].filelen;
 	ofs = header->lumps[lump].fileofs;
-	
+
 	//if ( length % size ) {
 	//	printf ("loadBSPFile: odd lump size");
 	//}
@@ -629,8 +629,8 @@ int BspLoader::copyLump( BSPHeader	*header, int lump, void *dest, int size ) {
 
 void BspLoader::swapBSPFile( void ) {
 	int				i;
-	
-	// models	
+
+	// models
 	swapBlock( (int *) &m_dmodels[0], m_nummodels * sizeof( m_dmodels[0] ) );
 
 	// shaders (don't swap the name)
@@ -641,7 +641,7 @@ void BspLoader::swapBSPFile( void ) {
 
 	// planes
 	swapBlock( (int *)&m_dplanes[0], m_numplanes * sizeof( m_dplanes[0] ) );
-	
+
 	// nodes
 	swapBlock( (int *)&m_dnodes[0], m_numnodes * sizeof( m_dnodes[0] ) );
 
@@ -681,7 +681,7 @@ bool BspLoader::findVectorByName(float* outvec,const char* name)
 {
 	const char *cl;
 	BSPVector3 origin;
-	
+
 	bool found = false;
 
 	parseEntities();
@@ -708,7 +708,7 @@ bool BspLoader::findVectorByName(float* outvec,const char* name)
 	}
 	return found;
 }
-  
+
 
 
 const BSPEntity * BspLoader::getEntityByValue( const char* name, const char* value)

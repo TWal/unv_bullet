@@ -4,8 +4,8 @@ Copyright (c) 2003-2006 Erwin Coumans  http://continuousphysics.com/Bullet/
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -60,7 +60,7 @@ public:
 		{
 			///perhaps we can do something special with entities (isEntity)
 			///like adding a collision Triggering (as example)
-			
+
 			if (vertices.size() > 0)
 			{
 				float mass = 0.f;
@@ -69,7 +69,7 @@ public:
 				startTransform.setIdentity();
 				startTransform.setOrigin(btVector3(0,0,-10.f));
 				//this create an internal copy of the vertices
-				
+
 				btCollisionShape* shape = new btConvexHullShape(&(vertices[0].getX()),vertices.size());
 				m_demoApp->m_collisionShapes.push_back(shape);
 
@@ -134,7 +134,7 @@ BspDemo::~BspDemo()
 void	BspDemo::initPhysics()
 {
 	const char* bspfilename = "BspDemo.bsp";
-	
+
 	initPhysics(bspfilename);
 }
 
@@ -144,7 +144,7 @@ void	BspDemo::initPhysics(const char* bspfilename)
 {
 	setTexturing(true);
 	setShadows(false);
-	
+
 	m_cameraUp = btVector3(0,0,1);
 	m_forwardAxis = 1;
 
@@ -170,11 +170,11 @@ void	BspDemo::initPhysics(const char* bspfilename)
 #ifdef QUAKE_BSP_IMPORTING
 
 	void* memoryBuffer = 0;
-	
+
 	FILE* file = fopen(bspfilename,"r");
 	if (!file)
 	{
-		//try again other path, 
+		//try again other path,
 		//sight... visual studio leaves the current working directory in the projectfiles folder
 		//instead of executable folder. who wants this default behaviour?!?
 		bspfilename = "../../BspDemo.bsp";
@@ -189,7 +189,7 @@ void	BspDemo::initPhysics(const char* bspfilename)
 	}
 	if (!file)
 	{
-		//try again other path, 
+		//try again other path,
 		//sight... visual studio leaves the current working directory in the projectfiles folder
 		//instead of executable folder. who wants this default behaviour?!?
 		bspfilename = "BspDemo.bsp";
@@ -229,9 +229,9 @@ void	BspDemo::initPhysics(const char* bspfilename)
 
 void BspDemo::clientMoveAndDisplay()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	float dt = getDeltaTimeMicroseconds() * 0.000001f;
-	
+
 	m_dynamicsWorld->stepSimulation(dt);
 
 	//optional but useful: debug drawing
@@ -248,7 +248,7 @@ void BspDemo::clientMoveAndDisplay()
 
 void BspDemo::displayCallback(void) {
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 	renderme();
@@ -295,7 +295,7 @@ char* makeExeToBspFilename(const char* lpCmdLine)
 		// If we hit a null or a quote, stop copying.  This will get just the first filename.
 		if(i && (in[0] == '.') && (in[1] == 'e') && (in[2] == 'x') && (in[3] == 'e'))
 			break;
-			
+
 		// If we hit a null or a quote, stop copying.  This will get just the first filename.
 		if(*in == '\0' || *in == '\"')
 			break;
@@ -316,6 +316,6 @@ char* makeExeToBspFilename(const char* lpCmdLine)
 	*(out++) = 's';
 	*(out++) = 'p';
 	*(out++) = 0;
-	
+
 	return cleaned_filename;
 }

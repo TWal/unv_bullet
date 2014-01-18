@@ -4,8 +4,8 @@ Copyright (c) 2003-2006 Erwin Coumans  http://continuousphysics.com/Bullet/
 
 This software is provided 'as-is', without any express or implied warranty.
 In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it freely,
 subject to the following restrictions:
 
 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
@@ -24,13 +24,13 @@ subject to the following restrictions:
 void BspConverter::convertBsp(BspLoader& bspLoader,float scaling)
 {
 	{
-		
+
 		float	playstartf[3] = {0,0,100};
 
 		if (bspLoader.findVectorByName(&playstartf[0],"info_player_start"))
 		{
 			printf("found playerstart\n");
-		} 
+		}
 		else
 		{
 			if (bspLoader.findVectorByName(&playstartf[0],"info_player_deathmatch"))
@@ -46,22 +46,22 @@ void BspConverter::convertBsp(BspLoader& bspLoader,float scaling)
 
 		playerStart *= scaling;
 
-		
+
 
 		//progressBegin("Loading bsp");
 
 		for (int i=0;i<bspLoader.m_numleafs;i++)
 		{
 			printf("Reading bspLeaf %i from total %i (%f procent)\n",i, bspLoader.m_numleafs,(100.f*(float)i/float(bspLoader.m_numleafs)) );
-			
+
 			bool isValidBrush = false;
-			
+
 			BSPLeaf&	leaf = bspLoader.m_dleafs[i];
-	
+
 			for (int b=0;b<leaf.numLeafBrushes;b++)
 			{
 				btAlignedObjectArray<btVector3> planeEquations;
-				
+
 				int brushid = bspLoader.m_dleafbrushes[leaf.firstLeafBrush+b];
 
 				BSPBrush& brush = bspLoader.m_dbrushes[brushid];
@@ -92,14 +92,14 @@ void BspConverter::convertBsp(BspLoader& bspLoader,float scaling)
 
 							btAlignedObjectArray<btVector3>	vertices;
 							btGeometryUtil::getVerticesFromPlaneEquations(planeEquations,vertices);
-						
+
 							bool isEntity = false;
 							btVector3 entityTarget(0.f,0.f,0.f);
 							addConvexVerticesCollider(vertices,isEntity,entityTarget);
-						
+
 						}
 					}
-				} 
+				}
 			}
 		}
 	}

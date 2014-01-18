@@ -62,7 +62,7 @@ typedef float BSPVector3[3];
 typedef struct {
 	int			ident;
 	int			version;
-	
+
 	BSPLump		lumps[HEADER_LUMPS];
 } BSPHeader;
 
@@ -92,28 +92,28 @@ typedef struct {
 } BSPNode;
 
 typedef struct {
-	int			cluster;	
+	int			cluster;
 	int			area;
-	
-	int			mins[3];	
+
+	int			mins[3];
 	int			maxs[3];
-	
+
 	int			firstLeafSurface;
 	int			numLeafSurfaces;
-	
+
 	int			firstLeafBrush;
 	int			numLeafBrushes;
 } BSPLeaf;
 
 typedef struct {
-	int			planeNum;	
+	int			planeNum;
 	int			shaderNum;
 } BSPBrushSide;
 
 typedef struct {
 	int			firstSide;
 	int			numSides;
-	int			shaderNum;	
+	int			shaderNum;
 } BSPBrush;
 
 
@@ -145,20 +145,20 @@ typedef struct {
 	int			shaderNum;
 	int			fogNum;
 	int			surfaceType;
-	
+
 	int			firstVert;
 	int			numVerts;
-	
+
 	int			firstIndex;
 	int			numIndexes;
-	
+
 	int			lightmapNum;
 	int			lightmapX, lightmapY;
 	int			lightmapWidth, lightmapHeight;
-	
+
 	BSPVector3		lightmapOrigin;
 	BSPVector3		lightmapVecs[3];
-	
+
 	int			patchWidth;
 	int			patchHeight;
 } BSPSurface;
@@ -180,7 +180,7 @@ class BspLoader
 		const char* getValueForKey( const BSPEntity *ent, const char *key ) const;
 
 		bool	getVectorForKey( const BSPEntity *ent, const char *key, BSPVector3 vec );
-		
+
 		float	getFloatForKey( const BSPEntity *ent, const char *key );
 
 		void parseEntities( void );
@@ -193,7 +193,7 @@ class BspLoader
 	protected:
 
 		void parseFromMemory (char *buffer, int size);
-		
+
 
 
 		bool isEndOfScript (bool crossline);
@@ -201,7 +201,7 @@ class BspLoader
 		bool getToken (bool crossline);
 
 		char *copystring(const char *s);
-	
+
 		void stripTrailing( char *e );
 
 		BSPKeyValuePair * parseEpair( void );
@@ -221,14 +221,14 @@ class BspLoader
 		int copyLump( BSPHeader	*header, int lump, void *dest, int size );
 
 		void swapBSPFile( void );
-		
-	
 
-	
+
+
+
 	public: //easier for conversion
 		int			m_num_entities;
 		btAlignedObjectArray<BSPEntity>	m_entities;
-		
+
 		int			m_nummodels;
 		btAlignedObjectArray<BSPModel>	m_dmodels;
 
@@ -268,7 +268,7 @@ class BspLoader
 		int			m_numVisBytes;
 		btAlignedObjectArray<unsigned char>		m_visBytes;
 
-		
+
 		int			m_numDrawIndexes;
 		btAlignedObjectArray<int>			m_drawIndexes;
 
