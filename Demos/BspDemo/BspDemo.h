@@ -43,6 +43,8 @@ class BspDemo : public GlutDemoApplication
 
 	btDefaultCollisionConfiguration* m_collisionConfiguration;
 
+    bool _useBvh;
+
 
 
 

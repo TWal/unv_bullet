@@ -36,11 +36,17 @@ subject to the following restrictions:
 class BspToBulletConverter : public BspConverter
 {
 	BspDemo* m_demoApp;
+    btTriangleMesh* _trimesh;
+    int _indexOffset;
+    int caca;
 
 public:
 
 	BspToBulletConverter(BspDemo*	demoApp)
-		:m_demoApp(demoApp)
+		:m_demoApp(demoApp),
+        _trimesh(new btTriangleMesh()),
+        _indexOffset(0),
+        caca(0)
 	{
 	}
 
@@ -58,12 +64,34 @@ public:
 				startTransform.setOrigin(btVector3(0,0,-10.f));
 				//this create an internal copy of the vertices
 
-				btCollisionShape* shape = new btConvexHullShape(&(vertices[0].getX()),vertices.size());
-				m_demoApp->m_collisionShapes.push_back(shape);
-
-				m_demoApp->localCreateRigidBody(mass, startTransform,shape);
+				btConvexHullShape* shape = new btConvexHullShape(&(vertices[0].getX()),vertices.size());
+                if(m_demoApp->_useBvh) {
+                    btShapeHull converter(shape);
+                    converter.buildHull(0.f);
+                    for(int i = 0; i < converter.numIndices(); i += 3) {
+                        _trimesh->addTriangle(converter.getVertexPointer()[converter.getIndexPointer()[i]], converter.getVertexPointer()[converter.getIndexPointer()[i+1]], converter.getVertexPointer()[converter.getIndexPointer()[i+2]]);
+                    }
+                    _indexOffset += converter.numVertices();
+                    delete shape;
+                } else {
+                    m_demoApp->m_collisionShapes.push_back(shape);
+                    m_demoApp->localCreateRigidBody(mass, startTransform,shape);
+                }
 			}
 		}
+
+        virtual void finished() {
+            if(m_demoApp->_useBvh) {
+                float mass = 0.f;
+				btTransform startTransform;
+				startTransform.setIdentity();
+				startTransform.setOrigin(btVector3(0,0,-10.f));
+
+                btBvhTriangleMeshShape* shape = new btBvhTriangleMeshShape(_trimesh, false, true);
+                m_demoApp->m_collisionShapes.push_back(shape);
+                m_demoApp->localCreateRigidBody(mass, startTransform, shape);
+            }
+        }
 };
 
 BspDemo::~BspDemo()
@@ -108,7 +136,7 @@ BspDemo::~BspDemo()
 
 void	BspDemo::initPhysics()
 {
-	const char* bspfilename = "BspDemo.bsp";
+	const char* bspfilename = "plat23-b11.bsp";
 
 	initPhysics(bspfilename);
 }
@@ -117,6 +145,8 @@ void	BspDemo::initPhysics()
 
 void	BspDemo::initPhysics(const char* bspfilename)
 {
+    _useBvh = true;
+
 	setTexturing(true);
 	setShadows(false);
 
@@ -145,14 +175,14 @@ void	BspDemo::initPhysics(const char* bspfilename)
 		//try again other path,
 		//sight... visual studio leaves the current working directory in the projectfiles folder
 		//instead of executable folder. who wants this default behaviour?!?
-		bspfilename = "../../BspDemo.bsp";
+		bspfilename = "../../plat23-b11.bsp";
 		file = fopen(bspfilename,"r");
 	}
 	if (!file)
 	{
 
 		//try again other path, cmake needs 4 levels deep back...
-		bspfilename = "../../../../BspDemo.bsp";
+		bspfilename = "../../../../plat23-b11.bsp";
 		file = fopen(bspfilename,"r");
 	}
 	if (!file)
@@ -160,7 +190,7 @@ void	BspDemo::initPhysics(const char* bspfilename)
 		//try again other path,
 		//sight... visual studio leaves the current working directory in the projectfiles folder
 		//instead of executable folder. who wants this default behaviour?!?
-		bspfilename = "BspDemo.bsp";
+		bspfilename = "plat23-b11.bsp";
 		file = fopen(bspfilename,"r");
 	}
 

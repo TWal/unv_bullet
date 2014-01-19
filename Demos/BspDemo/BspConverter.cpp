@@ -103,6 +103,7 @@ void BspConverter::convertBsp(BspLoader& bspLoader,float scaling)
 			}
 		}
 	}
+    finished();
 }
 
 
